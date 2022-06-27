@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:serviceJobStatusRequest xmlns:ns0="http://www.homeserve.com/ServiceBench/">
+  <ns0:version/>
+  <ns0:v4CrmVersion>corporis</ns0:v4CrmVersion>
+  <ns0:sourceSystemName>ut</ns0:sourceSystemName>
+  <ns0:sourceSystemVersion>exercitationem</ns0:sourceSystemVersion>
+  <ns0:statusRequest>
+    <ns0:requestControlID>34d469551a0b40e7b43</ns0:requestControlID>
+    <ns0:serviceJobID>8b1fb7c952be469c93a</ns0:serviceJobID>
+    <ns0:crmNumber>dolore</ns0:crmNumber>
+    <ns0:lastName>Smoughton</ns0:lastName>
+    <ns0:firstName>Cruz</ns0:firstName>
+    <ns0:phoneNumber>(753)-305-3673</ns0:phoneNumber>
+    <ns0:postalCode>velit</ns0:postalCode>
+    <ns0:returnCommentsFromDateTime>commodi</ns0:returnCommentsFromDateTime>
+    <ns0:includeAudits>pariatur.</ns0:includeAudits>
+    <ns0:contractNumber>in</ns0:contractNumber>
+    <ns0:serviceProviderAccount>ullam</ns0:serviceProviderAccount>
+    <ns0:toServiceJobDate>velit,</ns0:toServiceJobDate>
+    <ns0:fromServiceJobDate>illo</ns0:fromServiceJobDate>
+  </ns0:statusRequest>
+</ns0:serviceJobStatusRequest>

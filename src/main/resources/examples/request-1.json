@@ -1,0 +1,27 @@
+{
+  "headers": {
+    
+  },
+  "attachments": {
+    
+  },
+  "body": {
+    "serviceProviderInfoRequest": {
+      "version": "",
+      "v4CrmVersion": "",
+      "sourceSystemName": "SB",
+      "sourceSystemVersion": "2.0",
+      "serviceProviderRequest": {
+        "requestControlID": "",
+        "serviceProviderAccount": "TDE423",
+        "serviceProviderName": "",
+        "serviceProviderAddress1": "",
+        "serviceProviderAddress2": "",
+        "serviceProviderCity": "",
+        "serviceProviderStateProvince": "",
+        "serviceProviderPostalCode": "",
+        "serviceProviderPhone": ""
+      }
+    }
+  }
+}

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="serviceJobCancelSub_Flow" doc:id="33a37dbf-e426-456c-aa89-213850f24d00" >
+		<ee:transform doc:name="serviceJobCancel Request Mapping and Set Operation Name" doc:id="b5b64659-f438-44e1-a1b5-629dc9bb2293" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://servicebench.com/serviceOrder/service/types
+ns ser http://www.homeserve.com/ServiceBench/
+---
+{
+	ns0#serviceJobCancelRequest: {
+		ns0#version: payload.body.ser#serviceJobCancelRequest.ser#version,
+		ns0#v4CrmVersion: payload.body.ser#serviceJobCancelRequest.ser#v4CrmVersion,
+		ns0#sourceSystemName: payload.body.ser#serviceJobCancelRequest.ser#sourceSystemName,
+		ns0#sourceSystemVersion: payload.body.ser#serviceJobCancelRequest.ser#sourceSystemVersion,
+		ns0#cancelRequest: {
+			ns0#requestControlID: payload.body.ser#serviceJobCancelRequest.ser#cancelRequest.ser#requestControlID,
+			ns0#serviceJobID: payload.body.ser#serviceJobCancelRequest.ser#cancelRequest.ser#serviceJobID,
+			ns0#serviceProviderAccount: payload.body.ser#serviceJobCancelRequest.ser#cancelRequest.ser#serviceProviderAccount,
+			ns0#cancelReason: payload.body.ser#serviceJobCancelRequest.ser#cancelRequest.ser#cancelReason,
+			ns0#cancelDate: payload.body.ser#serviceJobCancelRequest.ser#cancelRequest.ser#cancelDate,
+			ns0#cancelReasonCode: payload.body.ser#serviceJobCancelRequest.ser#cancelRequest.ser#cancelReasonCode
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="operation" ><![CDATA["serviceJobCancel"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="ServiceBenchAPICall_SubFlow" doc:id="00064da2-005e-49e6-8401-0ba7a167b083" name="ServiceBenchAPICallSub_Flow"/>
+		<ee:transform doc:name="serviceJobCancel Response Mapping" doc:id="ea7baf5a-3754-4d80-a60e-de8528c4c74b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+ns ser http://www.homeserve.com/ServiceBench/
+ns ns0 http://servicebench.com/serviceOrder/service/types
+---
+{
+	body: {
+				ser#serviceJobCancelResponse: {
+				ser#version: payload.body.ns0#serviceJobCancelResponse.ns0#version,
+				ser#v4CrmVersion: payload.body.ns0#serviceJobCancelResponse.ns0#v4CrmVersion,
+				ser#sourceSystemName: payload.body.ns0#serviceJobCancelResponse.ns0#sourceSystemName,
+				ser#sourceSystemVersion: payload.body.ns0#serviceJobCancelResponse.ns0#sourceSystemVersion,
+				ser#msgStatus: payload.body.ns0#serviceJobCancelResponse.ns0#msgStatus,
+				(if(payload.body.ns0#serviceJobCancelResponse.ns0#msgStatus == "NORMAL"){
+				ser#cancelResponse: {
+					ser#requestControlID: payload.body.ns0#serviceJobCancelResponse.ns0#cancelResponse.ns0#requestControlID,
+					ser#serviceProviderAccount: payload.body.ns0#serviceJobCancelResponse.ns0#cancelResponse.ns0#serviceProviderAccount,
+					ser#serviceJobID: payload.body.ns0#serviceJobCancelResponse.ns0#cancelResponse.ns0#serviceJobID
+				}
+			}else{
+				ser#statusDetails: {
+					(payload.body.ns0#serviceJobCancelResponse.ns0#statusDetails.*ns0#statusDetail map ( statusDetail , indexOfStatusDetail ) -> {
+						ser#statusDetail: {
+							ser#errorNo: statusDetail.ns0#errorNo,
+							ser#errorText: statusDetail.ns0#errorText,
+							ser#errorField: statusDetail.ns0#errorField
+						}
+					})
+				}
+			})
+		}		
+	}write "application/xml",
+	headers: {
+		header: {
+			correlationId: correlationId
+		}write "application/xml"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

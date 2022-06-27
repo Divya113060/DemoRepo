@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="serviceJobStatusSub_Flow" doc:id="60a436ba-8807-4f4a-9c2d-88bc512a5c3f" >
+		<ee:transform doc:name="serviceJobStatus Request Mapping and Set Operation Name" doc:id="3fe25a96-9fd4-437e-b9e7-21efd7c5ccab" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://servicebench.com/serviceOrder/service/types
+ns ser http://www.homeserve.com/ServiceBench/
+---
+{
+	ns0#serviceJobStatusRequest: {
+		ns0#version: payload.body.ser#serviceJobStatusRequest.ser#version,
+		ns0#v4CrmVersion: payload.body.ser#serviceJobStatusRequest.ser#v4CrmVersion,
+		ns0#sourceSystemName: payload.body.ser#serviceJobStatusRequest.ser#sourceSystemName,
+		ns0#sourceSystemVersion: payload.body.ser#serviceJobStatusRequest.ser#sourceSystemVersion,
+		ns0#statusRequest: {
+			ns0#requestControlID: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#requestControlID,
+			ns0#serviceJobID: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#serviceJobID,
+			ns0#crmNumber: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#crmNumber,
+			ns0#lastName: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#lastName,
+			ns0#firstName: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#firstName,
+			ns0#phoneNumber: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#phoneNumber,
+			ns0#postalCode: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#postalCode,
+			ns0#returnCommentsFromDateTime: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#returnCommentsFromDateTime,
+			ns0#includeAudits: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#includeAudits,
+			ns0#contractNumber: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#contractNumber,
+			ns0#serviceProviderAccount: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#serviceProviderAccount,
+			ns0#toServiceJobDate: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#toServiceJobDate,
+			ns0#fromServiceJobDate: payload.body.ser#serviceJobStatusRequest.ser#statusRequest.ser#fromServiceJobDate
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="operation" ><![CDATA["serviceJobStatus"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="serviceBenchAPICall_SubFlow" doc:id="53e0b624-ee50-48d8-8f41-32aff4088b6a" name="ServiceBenchAPICallSub_Flow" />
+		<ee:transform doc:name="serviceJobStatus Response Mapping" doc:id="202537b4-14bf-46fa-add8-fee5fead33ed" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+ns ser http://www.homeserve.com/ServiceBench/
+ns ns0 http://servicebench.com/serviceOrder/service/types
+---
+{
+	body: {
+			ser#serviceJobStatusResponse: {
+			ser#version: payload.body.ns0#serviceJobStatusResponse.ns0#version,
+			ser#v4CrmVersion: payload.body.ns0#serviceJobStatusResponse.ns0#v4CrmVersion,
+			ser#sourceSystemName: payload.body.ns0#serviceJobStatusResponse.ns0#sourceSystemName,
+			ser#sourceSystemVersion: payload.body.ns0#serviceJobStatusResponse.ns0#sourceSystemVersion,
+			ser#msgStatus: payload.body.ns0#serviceJobStatusResponse.ns0#msgStatus,
+			
+			(if(payload.body.ns0#serviceJobStatusResponse.ns0#msgStatus == "NORMAL"){
+			ser#statusResponse: {
+				ser#requestControlID: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#requestControlID,
+				ser#serviceJobStatusDetails: {
+					(payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceJobStatusDetails.*ns0#serviceJobStatusDetail map ( serviceJobStatusDetail , indexOfServiceJobStatusDetail ) -> {
+						ser#serviceJobStatusDetail: {
+							ser#serviceProviderAccount: serviceJobStatusDetail.ns0#serviceProviderAccount,
+							ser#serviceJobID: serviceJobStatusDetail.ns0#serviceJobID,
+							ser#serviceJobHashValue: serviceJobStatusDetail.ns0#serviceJobHashValue,
+							ser#serviceJobStatus: serviceJobStatusDetail.ns0#serviceJobStatus,
+							ser#serviceJobSubstatus: serviceJobStatusDetail.ns0#serviceJobSubstatus,
+							ser#dateAccepted: serviceJobStatusDetail.ns0#dateAccepted,
+							ser#completionDate: serviceJobStatusDetail.ns0#completionDate,
+							ser#rejectedDate: serviceJobStatusDetail.ns0#rejectedDate,
+							ser#rejectReason: serviceJobStatusDetail.ns0#rejectReason,
+							ser#rejectExplaination: serviceJobStatusDetail.ns0#rejectExplaination,
+							ser#rescheduleDate: serviceJobStatusDetail.ns0#rescheduleDate,
+							ser#rescheduleReason: serviceJobStatusDetail.ns0#rescheduleReason,
+							ser#serviceDate: serviceJobStatusDetail.ns0#serviceDate,
+							ser#serviceExplanation: serviceJobStatusDetail.ns0#serviceExplanation,
+							ser#serviceDescription: serviceJobStatusDetail.ns0#serviceDescription,
+							ser#specialInstructions: serviceJobStatusDetail.ns0#specialInstructions,
+							ser#companyName: serviceJobStatusDetail.ns0#companyName,
+							ser#lastName: serviceJobStatusDetail.ns0#lastName,
+							ser#firstName: serviceJobStatusDetail.ns0#firstName,
+							ser#address1: serviceJobStatusDetail.ns0#address1,
+							ser#address2: serviceJobStatusDetail.ns0#address2,
+							ser#city: serviceJobStatusDetail.ns0#city,
+							ser#stateProvince: serviceJobStatusDetail.ns0#stateProvince,
+							ser#postalCode: serviceJobStatusDetail.ns0#postalCode,
+							ser#country: serviceJobStatusDetail.ns0#country,
+							ser#homePhone: serviceJobStatusDetail.ns0#homePhone,
+							ser#workPhone: serviceJobStatusDetail.ns0#workPhone,
+							ser#alternatePhone: serviceJobStatusDetail.ns0#alternatePhone,
+							ser#emailAddress: serviceJobStatusDetail.ns0#emailAddress,
+							ser#alternateEmailAddress: serviceJobStatusDetail.ns0#alternateEmailAddress,
+							ser#accountAddress1: serviceJobStatusDetail.ns0#accountAddress1,
+							ser#accountAddress2: serviceJobStatusDetail.ns0#accountAddress2,
+							ser#accountCity: serviceJobStatusDetail.ns0#accountCity,
+							ser#accountStateProvince: serviceJobStatusDetail.ns0#accountStateProvince,
+							ser#accountPostalCode: serviceJobStatusDetail.ns0#accountPostalCode,
+							ser#accountCountry: serviceJobStatusDetail.ns0#accountCountry,
+							ser#accountPhone: serviceJobStatusDetail.ns0#accountPhone,
+							ser#accountWorkPhone: serviceJobStatusDetail.ns0#accountWorkPhone,
+							ser#accountAlternatePhone: serviceJobStatusDetail.ns0#accountAlternatePhone,
+							ser#directionsCrossStreets: serviceJobStatusDetail.ns0#directionsCrossStreets,
+							ser#paymentType: serviceJobStatusDetail.ns0#paymentType,
+							ser#programNumber: serviceJobStatusDetail.ns0#programNumber,
+							ser#contractNumber: serviceJobStatusDetail.ns0#contractNumber,
+							ser#contractPurchaseDate: serviceJobStatusDetail.ns0#contractPurchaseDate,
+							ser#complaintCode: serviceJobStatusDetail.ns0#complaintCode,
+							ser#crmNumber: serviceJobStatusDetail.ns0#crmNumber,
+							ser#purchasedFrom: serviceJobStatusDetail.ns0#purchasedFrom,
+							ser#mailingLabelMethod: serviceJobStatusDetail.ns0#mailingLabelMethod,
+							ser#preferredContactMethod: serviceJobStatusDetail.ns0#preferredContactMethod,
+							ser#primaryPhoneNumber: serviceJobStatusDetail.ns0#primaryPhoneNumber,
+							ser#productSize: serviceJobStatusDetail.ns0#productSize,
+							ser#storeNumber: serviceJobStatusDetail.ns0#storeNumber,
+							ser#productPickupLocation: serviceJobStatusDetail.ns0#productPickupLocation,
+							ser#posStoreNumber: serviceJobStatusDetail.ns0#posStoreNumber,
+							ser#posTransactionNumber: serviceJobStatusDetail.ns0#posTransactionNumber,
+							ser#posTerminalNumber: serviceJobStatusDetail.ns0#posTerminalNumber,
+							ser#posRetailerRefNumber: serviceJobStatusDetail.ns0#posRetailerRefNumber,
+							ser#posPersonSelling: serviceJobStatusDetail.ns0#posPersonSelling,
+							ser#posSaleDate: serviceJobStatusDetail.ns0#posSaleDate,
+							ser#posSaleTime: serviceJobStatusDetail.ns0#posSaleTime,
+							ser#boxSentDate: serviceJobStatusDetail.ns0#boxSentDate,
+							ser#labelSentDate: serviceJobStatusDetail.ns0#labelSentDate,
+							ser#productReceivedDate: serviceJobStatusDetail.ns0#productReceivedDate,
+							ser#productReturnedDate: serviceJobStatusDetail.ns0#productReturnedDate,
+							ser#serviceJobType: serviceJobStatusDetail.ns0#serviceJobType,
+							ser#userName: serviceJobStatusDetail.ns0#userName,
+							ser#technicianName: serviceJobStatusDetail.ns0#technicianName,
+							ser#technicianPhone: serviceJobStatusDetail.ns0#technicianPhone,
+							ser#serviceProviderName: serviceJobStatusDetail.ns0#serviceProviderName,
+							ser#serviceProviderAddress1: serviceJobStatusDetail.ns0#serviceProviderAddress1,
+							ser#serviceProviderAddress2: serviceJobStatusDetail.ns0#serviceProviderAddress2,
+							ser#serviceProviderCity: serviceJobStatusDetail.ns0#serviceProviderCity,
+							ser#serviceProviderStateProvince: serviceJobStatusDetail.ns0#serviceProviderStateProvince,
+							ser#serviceProviderPostalCode: serviceJobStatusDetail.ns0#serviceProviderPostalCode,
+							ser#serviceProviderCountry: serviceJobStatusDetail.ns0#serviceProviderCountry,
+							ser#serviceProviderPhone: serviceJobStatusDetail.ns0#serviceProviderPhone,
+							ser#serviceProviderContactName: serviceJobStatusDetail.ns0#serviceProviderContactName,
+							ser#serviceProviderContactEmail: serviceJobStatusDetail.ns0#serviceProviderContactEmail,
+							ser#serviceCategory: serviceJobStatusDetail.ns0#serviceCategory,
+							ser#serviceSubCategory: serviceJobStatusDetail.ns0#serviceSubCategory,
+							ser#serviceType: serviceJobStatusDetail.ns0#serviceType,
+							ser#escalationStatus: serviceJobStatusDetail.ns0#escalationStatus,
+							ser#escalationDescription: serviceJobStatusDetail.ns0#escalationDescription,
+							ser#escalationResponseDueIn: serviceJobStatusDetail.ns0#escalationResponseDueIn,
+							ser#escalationDenialReason: serviceJobStatusDetail.ns0#escalationDenialReason,
+							ser#escalationEstimatedServiceDate: serviceJobStatusDetail.ns0#escalationEstimatedServiceDate,
+							ser#totalRepairAmount: serviceJobStatusDetail.ns0#totalRepairAmount,
+							ser#customerPrePaidAmount: serviceJobStatusDetail.ns0#customerPrePaidAmount,
+							ser#productLineAmount: serviceJobStatusDetail.ns0#productLineAmount,
+							ser#serviceContractPlanNumber: serviceJobStatusDetail.ns0#serviceContractPlanNumber,
+							ser#scheduledServiceDate: serviceJobStatusDetail.ns0#scheduledServiceDate,
+							ser#slotStartTime: serviceJobStatusDetail.ns0#slotStartTime,
+							ser#slotLength: serviceJobStatusDetail.ns0#slotLength,
+							ser#serviceJobDate: serviceJobStatusDetail.ns0#serviceJobDate,
+							ser#serviceJobExpirationDate: serviceJobStatusDetail.ns0#serviceJobExpirationDate,
+							ser#cancelReasonCode: serviceJobStatusDetail.ns0#cancelReasonCode,
+							ser#cancelReasonText: serviceJobStatusDetail.ns0#cancelReasonText,
+							ser#primaryRepairCode: serviceJobStatusDetail.ns0#primaryRepairCode,
+							ser#models: {
+								(serviceJobStatusDetail.ns0#models.*ns0#model map ( model , indexOfModel ) -> {
+									ser#model: {
+										ser#productRowNumber: model.ns0#productRowNumber,
+										ser#productStatus: model.ns0#productStatus,
+										ser#productSubStatus: model.ns0#productSubStatus,
+										ser#productCode: model.ns0#productCode,
+										ser#oem: model.ns0#oem,
+										ser#productLine: model.ns0#productLine,
+										ser#merchandiseCode: model.ns0#merchandiseCode,
+										ser#modelID: model.ns0#modelID,
+										ser#brand: model.ns0#brand,
+										ser#serialNumber: model.ns0#serialNumber,
+										ser#serialNumberElectronic: model.ns0#serialNumberElectronic,
+										ser#purchaseDate: model.ns0#purchaseDate,
+										ser#purchasedFrom: model.ns0#purchasedFrom,
+										ser#contractPurchaseDate: model.ns0#contractPurchaseDate,
+										ser#contractNumber: model.ns0#contractNumber,
+										ser#serviceContractExpiryDate: model.ns0#serviceContractExpiryDate,
+										ser#purchasePrice: model.ns0#purchasePrice,
+										ser#authorizationNumber: model.ns0#authorizationNumber,
+										ser#authorizationAmount: model.ns0#authorizationAmount,
+										ser#pexSerialNumber: model.ns0#pexSerialNumber,
+										ser#pexModelId: model.ns0#pexModelId,
+										ser#pexBrand: model.ns0#pexBrand,
+										ser#pexPuchasePrice: model.ns0#pexPuchasePrice,
+										ser#pexUnitReceivedDate: model.ns0#pexUnitReceivedDate,
+										ser#pexExpectedDeliveryDate: model.ns0#pexExpectedDeliveryDate,
+										ser#pexDeliveredDate: model.ns0#pexDeliveredDate,
+										ser#failureDate: model.ns0#failureDate,
+										ser#productLineAmount: model.ns0#productLineAmount,
+										ser#productSize: model.ns0#productSize,
+										ser#shippingCompany: model.ns0#shippingCompany,
+										ser#shippingMethod: model.ns0#shippingMethod,
+										ser#modelVersion: model.ns0#modelVersion,
+										ser#warrantyInfo: model.ns0#warrantyInfo,
+										ser#laborWarrantyExpiryDate: model.ns0#laborWarrantyExpiryDate,
+										ser#partsWarrantyExpiryDate: model.ns0#partsWarrantyExpiryDate,
+										ser#unitLocation: model.ns0#unitLocation
+									}
+								})
+							},
+							ser#comments: {
+								(serviceJobStatusDetail.ns0#comments.*ns0#comment map ( comment , indexOfComment ) -> {
+									ser#comment: {
+										ser#commentText: comment.ns0#commentText,
+										ser#userID: comment.ns0#userID,
+										ser#userServiceBenchID: comment.ns0#userServiceBenchID,
+										ser#commentDate: comment.ns0#commentDate,
+										ser#commentType: comment.ns0#commentType
+									}
+								})
+							},
+							ser#parts: {
+								(serviceJobStatusDetail.ns0#parts.*ns0#part map ( part , indexOfPart ) -> {
+									ser#part: {
+										ser#productRowNumber: part.ns0#productRowNumber,
+										ser#lineNumber: part.ns0#lineNumber,
+										ser#partNumber: part.ns0#partNumber,
+										ser#partDescription: part.ns0#partDescription,
+										ser#quantity: part.ns0#quantity,
+										ser#partStatus: part.ns0#partStatus,
+										ser#partStatusDate: part.ns0#partStatusDate,
+										ser#partOrderedNumber: part.ns0#partOrderedNumber,
+										ser#invoiceNumber: part.ns0#invoiceNumber,
+										ser#shippingCompany: part.ns0#shippingCompany,
+										ser#trackingNumber: part.ns0#trackingNumber,
+										ser#partOrderDate: part.ns0#partOrderDate,
+										ser#partReceivedDate: part.ns0#partReceivedDate,
+										ser#partOrderETA: part.ns0#partOrderETA,
+										ser#serialNumber: part.ns0#serialNumber,
+										ser#electronicSerialNumber: part.ns0#electronicSerialNumber,
+										ser#saSourced: part.ns0#saSourced
+									}
+								})
+							},
+							ser#mailIns: {
+								(serviceJobStatusDetail.ns0#mailIns.*ns0#mailIn map ( mailIn , indexOfMailIn ) -> {
+									ser#mailIn: {
+										ser#shippedItem: mailIn.ns0#shippedItem,
+										ser#status: mailIn.ns0#status,
+										ser#shipper: mailIn.ns0#shipper,
+										ser#trackingNumber: mailIn.ns0#trackingNumber,
+										ser#note: mailIn.ns0#note,
+										ser#mailingLabelURL: mailIn.ns0#mailingLabelURL
+									}
+								})
+							},
+							ser#services: {
+								(serviceJobStatusDetail.ns0#services.*ns0#service map ( service , indexOfService ) -> {
+									ser#service: {
+										ser#serviceRowNumber: service.ns0#serviceRowNumber,
+										ser#serviceID: service.ns0#serviceID,
+										ser#serviceTransactionNumber: service.ns0#serviceTransactionNumber,
+										ser#quantity: service.ns0#quantity,
+										ser#serviceStatus: service.ns0#serviceStatus,
+										ser#serviceStatusDate: service.ns0#serviceStatusDate,
+										ser#serviceNumber: service.ns0#serviceNumber,
+										ser#servicePurchaseDate: service.ns0#servicePurchaseDate,
+										ser#serviceProduct: service.ns0#serviceProduct
+									}
+								})
+							},
+							ser#audits: {
+								(serviceJobStatusDetail.ns0#audits.*ns0#audit map ( audit , indexOfAudit ) -> {
+									ser#audit: {
+										ser#auditDate: audit.ns0#auditDate,
+										ser#auditTime: audit.ns0#auditTime,
+										ser#field: audit.ns0#field,
+										ser#newValue: audit.ns0#newValue,
+										ser#oldValue: audit.ns0#oldValue,
+										ser#userID: audit.ns0#userID,
+										ser#updateSource: audit.ns0#updateSource
+									}
+								})
+							}
+						}
+					})
+				},
+				ser#serviceProviderAccount: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceProviderAccount,
+				ser#serviceJobID: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceJobID,
+				ser#serviceJobStatus: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceJobStatus,
+				ser#serviceJobSubstatus: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceJobSubstatus,
+				ser#dateAccepted: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#dateAccepted,
+				ser#completionDate: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#completionDate,
+				ser#rejectedDate: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#rejectedDate,
+				ser#rejectReason: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#rejectReason,
+				ser#rescheduleDate: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#rescheduleDate,
+				ser#rescheduleReason: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#rescheduleReason,
+				ser#serviceDate: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceDate,
+				ser#serviceExplanation: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceExplanation,
+				ser#serviceDescription: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceDescription,
+				ser#specialInstructions: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#specialInstructions,
+				ser#companyName: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#companyName,
+				ser#lastName: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#lastName,
+				ser#firstName: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#firstName,
+				ser#address1: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#address1,
+				ser#address2: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#address2,
+				ser#city: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#city,
+				ser#stateProvince: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#stateProvince,
+				ser#postalCode: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#postalCode,
+				ser#country: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#country,
+				ser#homePhone: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#homePhone,
+				ser#workPhone: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#workPhone,
+				ser#alternatePhone: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#alternatePhone,
+				ser#emailAddress: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#emailAddress,
+				ser#alternateEmailAddress: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#alternateEmailAddress,
+				ser#accountAddress1: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#accountAddress1,
+				ser#accountAddress2: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#accountAddress2,
+				ser#accountCity: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#accountCity,
+				ser#accountStateProvince: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#accountStateProvince,
+				ser#accountPostalCode: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#accountPostalCode,
+				ser#accountCountry: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#accountCountry,
+				ser#accountPhone: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#accountPhone,
+				ser#accountWorkPhone: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#accountWorkPhone,
+				ser#accountAlternatePhone: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#accountAlternatePhone,
+				ser#directionsCrossStreets: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#directionsCrossStreets,
+				ser#paymentType: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#paymentType,
+				ser#contractPurchaseDate: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#contractPurchaseDate,
+				ser#complaintCode: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#complaintCode,
+				ser#crmNumber: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#crmNumber,
+				ser#purchasedFrom: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#purchasedFrom,
+				ser#programNumber: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#programNumber,
+				ser#planType: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#planType,
+				ser#mailingLabelMethod: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#mailingLabelMethod,
+				ser#preferredContactMethod: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#preferredContactMethod,
+				ser#primaryPhoneNumber: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#primaryPhoneNumber,
+				ser#productSize: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#productSize,
+				ser#storeNumber: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#storeNumber,
+				ser#productPickupLocation: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#productPickupLocation,
+				ser#posStoreNumber: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#posStoreNumber,
+				ser#posTransactionNumber: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#posTransactionNumber,
+				ser#posTerminalNumber: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#posTerminalNumber,
+				ser#posRetailerRefNumber: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#posRetailerRefNumber,
+				ser#posPersonSelling: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#posPersonSelling,
+				ser#posSaleDate: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#posSaleDate,
+				ser#posSaleTime: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#posSaleTime,
+				ser#boxSentDate: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#boxSentDate,
+				ser#labelSentDate: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#labelSentDate,
+				ser#productReceivedDate: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#productReceivedDate,
+				ser#productReturnedDate: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#productReturnedDate,
+				ser#serviceJobType: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceJobType,
+				ser#userName: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#userName,
+				ser#technicianName: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#technicianName,
+				ser#technicianPhone: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#technicianPhone,
+				ser#serviceProviderName: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceProviderName,
+				ser#serviceProviderAddress1: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceProviderAddress1,
+				ser#serviceProviderAddress2: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceProviderAddress2,
+				ser#serviceProviderCity: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceProviderCity,
+				ser#serviceProviderStateProvince: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceProviderStateProvince,
+				ser#serviceProviderPostalCode: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceProviderPostalCode,
+				ser#serviceProviderCountry: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceProviderCountry,
+				ser#serviceProviderPhone: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceProviderPhone,
+				ser#serviceProviderContactName: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceProviderContactName,
+				ser#serviceProviderContactEmail: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceProviderContactEmail,
+				ser#serviceCategory: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceCategory,
+				ser#serviceSubCategory: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceSubCategory,
+				ser#serviceType: payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#serviceType,
+				ser#models: {
+					(payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#models.*ns0#model map ( model , indexOfModel ) -> {
+						ser#model: {
+							ser#productRowNumber: model.ns0#productRowNumber,
+							ser#productStatus: model.ns0#productStatus,
+							ser#productSubStatus: model.ns0#productSubStatus,
+							ser#productCode: model.ns0#productCode,
+							ser#oem: model.ns0#oem,
+							ser#productLine: model.ns0#productLine,
+							ser#merchandiseCode: model.ns0#merchandiseCode,
+							ser#modelID: model.ns0#modelID,
+							ser#brand: model.ns0#brand,
+							ser#serialNumber: model.ns0#serialNumber,
+							ser#serialNumberElectronic: model.ns0#serialNumberElectronic,
+							ser#purchaseDate: model.ns0#purchaseDate,
+							ser#purchasedFrom: model.ns0#purchasedFrom,
+							ser#contractPurchaseDate: model.ns0#contractPurchaseDate,
+							ser#contractNumber: model.ns0#contractNumber,
+							ser#serviceContractExpiryDate: model.ns0#serviceContractExpiryDate,
+							ser#purchasePrice: model.ns0#purchasePrice,
+							ser#authorizationNumber: model.ns0#authorizationNumber,
+							ser#authorizationAmount: model.ns0#authorizationAmount,
+							ser#pexSerialNumber: model.ns0#pexSerialNumber,
+							ser#pexModelId: model.ns0#pexModelId,
+							ser#pexBrand: model.ns0#pexBrand,
+							ser#pexPuchasePrice: model.ns0#pexPuchasePrice,
+							ser#pexUnitReceivedDate: model.ns0#pexUnitReceivedDate,
+							ser#pexExpectedDeliveryDate: model.ns0#pexExpectedDeliveryDate,
+							ser#pexDeliveredDate: model.ns0#pexDeliveredDate,
+							ser#failureDate: model.ns0#failureDate,
+							ser#productLineAmount: model.ns0#productLineAmount,
+							ser#productSize: model.ns0#productSize,
+							ser#shippingCompany: model.ns0#shippingCompany,
+							ser#shippingMethod: model.ns0#shippingMethod,
+							ser#modelVersion: model.ns0#modelVersion,
+							ser#warrantyInfo: model.ns0#warrantyInfo,
+							ser#laborWarrantyExpiryDate: model.ns0#laborWarrantyExpiryDate,
+							ser#partsWarrantyExpiryDate: model.ns0#partsWarrantyExpiryDate,
+							ser#unitLocation: model.ns0#unitLocation
+						}
+					})
+				},
+				ser#comments: {
+					(payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#comments.*ns0#comment map ( comment , indexOfComment ) -> {
+						ser#comment: {
+							ser#commentText: comment.ns0#commentText,
+							ser#userID: comment.ns0#userID,
+							ser#userServiceBenchID: comment.ns0#userServiceBenchID,
+							ser#commentDate: comment.ns0#commentDate,
+							ser#commentType: comment.ns0#commentType
+						}
+					})
+				},
+				ser#parts: {
+					(payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#parts.*ns0#part map ( part , indexOfPart ) -> {
+						ser#part: {
+							ser#productRowNumber: part.ns0#productRowNumber,
+							ser#lineNumber: part.ns0#lineNumber,
+							ser#partNumber: part.ns0#partNumber,
+							ser#partDescription: part.ns0#partDescription,
+							ser#quantity: part.ns0#quantity,
+							ser#partStatus: part.ns0#partStatus,
+							ser#partStatusDate: part.ns0#partStatusDate,
+							ser#partOrderedNumber: part.ns0#partOrderedNumber,
+							ser#invoiceNumber: part.ns0#invoiceNumber,
+							ser#shippingCompany: part.ns0#shippingCompany,
+							ser#trackingNumber: part.ns0#trackingNumber,
+							ser#partOrderDate: part.ns0#partOrderDate,
+							ser#partReceivedDate: part.ns0#partReceivedDate,
+							ser#partOrderETA: part.ns0#partOrderETA,
+							ser#serialNumber: part.ns0#serialNumber,
+							ser#electronicSerialNumber: part.ns0#electronicSerialNumber,
+							ser#saSourced: part.ns0#saSourced
+						}
+					})
+				},
+				ser#mailIns: {
+					(payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#mailIns.*ns0#mailIn map ( mailIn , indexOfMailIn ) -> {
+						ser#mailIn: {
+							ser#shippedItem: mailIn.ns0#shippedItem,
+							ser#status: mailIn.ns0#status,
+							ser#shipper: mailIn.ns0#shipper,
+							ser#trackingNumber: mailIn.ns0#trackingNumber,
+							ser#note: mailIn.ns0#note,
+							ser#mailingLabelURL: mailIn.ns0#mailingLabelURL
+						}
+					})
+				},
+				ser#services: {
+					(payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#services.*ns0#service map ( service , indexOfService ) -> {
+						ser#service: {
+							ser#serviceRowNumber: service.ns0#serviceRowNumber,
+							ser#serviceID: service.ns0#serviceID,
+							ser#serviceTransactionNumber: service.ns0#serviceTransactionNumber,
+							ser#quantity: service.ns0#quantity,
+							ser#serviceStatus: service.ns0#serviceStatus,
+							ser#serviceStatusDate: service.ns0#serviceStatusDate,
+							ser#serviceNumber: service.ns0#serviceNumber,
+							ser#servicePurchaseDate: service.ns0#servicePurchaseDate,
+							ser#serviceProduct: service.ns0#serviceProduct
+						}
+					})
+				},
+				ser#audits: {
+					(payload.body.ns0#serviceJobStatusResponse.ns0#statusResponse.ns0#audits.*ns0#audit map ( audit , indexOfAudit ) -> {
+						ser#audit: {
+							ser#auditDate: audit.ns0#auditDate,
+							ser#auditTime: audit.ns0#auditTime,
+							ser#field: audit.ns0#field,
+							ser#newValue: audit.ns0#newValue,
+							ser#oldValue: audit.ns0#oldValue,
+							ser#userID: audit.ns0#userID,
+							ser#updateSource: audit.ns0#updateSource
+						}
+					})
+				}
+			}
+		}else{
+
+			ser#statusDetails: {
+				(payload.body.ns0#serviceJobStatusResponse.ns0#statusDetails.*ns0#statusDetail map ( statusDetail , indexOfStatusDetail ) -> {
+					ser#statusDetail: {
+						ser#errorNo: statusDetail.ns0#errorNo,
+						ser#errorText: statusDetail.ns0#errorText,
+						ser#errorField: statusDetail.ns0#errorField
+					}
+				})
+			}
+		})
+		}		
+	}write "application/xml",
+	headers: {
+		header: {
+			correlationId: correlationId
+		}write "application/xml"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

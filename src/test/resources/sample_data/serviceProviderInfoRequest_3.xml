@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:serviceProviderInfoRequest xmlns:ns0="http://www.homeserve.com/ServiceBench/">
+  <ns0:version>in</ns0:version>
+  <ns0:v4CrmVersion>ipsam</ns0:v4CrmVersion>
+  <ns0:sourceSystemName>dolore</ns0:sourceSystemName>
+  <ns0:sourceSystemVersion>ad</ns0:sourceSystemVersion>
+  <ns0:serviceProviderRequest>
+    <ns0:requestControlID>6c12b1b5c0144730981</ns0:requestControlID>
+    <ns0:serviceProviderAccount>nisi</ns0:serviceProviderAccount>
+    <ns0:serviceProviderName>Lorem</ns0:serviceProviderName>
+    <ns0:serviceProviderAddress1>Quis</ns0:serviceProviderAddress1>
+    <ns0:serviceProviderAddress2>voluptatem</ns0:serviceProviderAddress2>
+    <ns0:serviceProviderCity>quo</ns0:serviceProviderCity>
+    <ns0:serviceProviderStateProvince/>
+    <ns0:serviceProviderPostalCode>porro</ns0:serviceProviderPostalCode>
+    <ns0:serviceProviderPhone>(516)-718-4197</ns0:serviceProviderPhone>
+  </ns0:serviceProviderRequest>
+</ns0:serviceProviderInfoRequest>

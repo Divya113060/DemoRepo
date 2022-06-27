@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="preAuthorizationCreateSub_Flow" doc:id="d7742f30-9e5b-4b2f-b268-88bf3e175139" >
+		<ee:transform doc:name="preAuthCreate Request Mapping and Set OperationName" doc:id="1360aaf7-7739-49b6-966b-333841c7db47" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://servicebench.com/serviceOrder/service/types
+ns ser http://www.homeserve.com/ServiceBench/
+---
+{
+	ns0#preAuthorizationCreateRequest: {
+		ns0#version: payload.body.ser#preAuthorizationCreateRequest.ser#version,
+		ns0#v4CrmVersion: payload.body.ser#preAuthorizationCreateRequest.ser#v4CrmVersion,
+		ns0#sourceSystemName: payload.body.ser#preAuthorizationCreateRequest.ser#sourceSystemName,
+		ns0#sourceSystemVersion: payload.body.ser#preAuthorizationCreateRequest.ser#sourceSystemVersion,
+		ns0#preauthorizationRequest: {
+			ns0#requestControlID: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#requestControlID,
+			ns0#authorizationNumber: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#authorizationNumber,
+			ns0#preauthorizationDetails: {
+				(payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#preauthorizationDetails.*ser#preauthorizationDetail map ( preauthorizationDetail , indexOfPreauthorizationDetail ) -> {
+					ns0#preauthorizationDetail: {
+						ns0#authorizationDetailType: preauthorizationDetail.ser#authorizationDetailType,
+						ns0#authorizationAmount: preauthorizationDetail.ser#authorizationAmount,
+						ns0#authorizationInterpretation: preauthorizationDetail.ser#authorizationInterpretation
+					}
+				})
+			},
+			ns0#assignedBy: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#assignedBy,
+			ns0#accountNumber: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#accountNumber,
+			ns0#productNumber: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#productNumber,
+			ns0#productCategory: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#productCategory,
+			ns0#serialNumberFrom: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#serialNumberFrom,
+			ns0#serialNumberTo: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#serialNumberTo,
+			ns0#lastName: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#lastName,
+			ns0#firstName: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#firstName,
+			ns0#companyName: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#companyName,
+			ns0#addressLine1: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#addressLine1,
+			ns0#addressLine2: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#addressLine2,
+			ns0#addressLine3: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#addressLine3,
+			ns0#email: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#email,
+			ns0#addressCity: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#addressCity,
+			ns0#addressState: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#addressState,
+			ns0#addressZip: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#addressZip,
+			ns0#addressCountry: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#addressCountry,
+			ns0#phone: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#phone,
+			ns0#otherPhone: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#otherPhone,
+			ns0#referenceNumber: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#referenceNumber,
+			ns0#comment: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#comment,
+			ns0#authorizationCode: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#authorizationCode,
+			ns0#authorizationType: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#authorizationType,
+			ns0#costCenter: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#costCenter,
+			ns0#thirdPartyID: payload.body.ser#preAuthorizationCreateRequest.ser#preauthorizationRequest.ser#thirdPartyID
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="operation" ><![CDATA["preAuthorizationCreate"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="ServiceBenchAPICall_SubFlow" doc:id="252993cb-4168-4842-b1c6-8c2da0b9efa5" name="ServiceBenchAPICallSub_Flow"/>
+		<ee:transform doc:name="preAuthCreate Response Mapping" doc:id="908232e6-57d9-44e2-9133-18fcd06f764e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+ns ser http://www.homeserve.com/ServiceBench/
+ns ns0 http://servicebench.com/serviceOrder/service/types
+---
+{
+	body: {
+				ser#preAuthorizationCreateResponse: {
+				ser#version: payload.body.ns0#preAuthorizationCreateResponse.ns0#version,
+				ser#v4CrmVersion: payload.body.ns0#preAuthorizationCreateResponse.ns0#v4CrmVersion,
+				ser#sourceSystemName: payload.body.ns0#preAuthorizationCreateResponse.ns0#sourceSystemName,
+				ser#sourceSystemVersion: payload.body.ns0#preAuthorizationCreateResponse.ns0#sourceSystemVersion,
+				ser#msgStatus: payload.body.ns0#preAuthorizationCreateResponse.ns0#msgStatus,
+
+				(if(payload.body.ns0#preAuthorizationCreateResponse.ns0#msgStatus == "NORMAL"){		
+				ser#preauthorizationResponse: {
+					ser#requestControlID: payload.body.ns0#preAuthorizationCreateResponse.ns0#preauthorizationResponse.ns0#requestControlID,
+					ser#preauthorizationNumber: payload.body.ns0#preAuthorizationCreateResponse.ns0#preauthorizationResponse.ns0#preauthorizationNumber
+				}
+			}else{
+				ser#statusDetails: {
+					(payload.body.ns0#preAuthorizationCreateResponse.ns0#statusDetails.*ns0#statusDetail map ( statusDetail , indexOfStatusDetail ) -> {
+						ser#statusDetail: {
+							ser#errorNo: statusDetail.ns0#errorNo,
+							ser#errorText: statusDetail.ns0#errorText,
+							ser#errorField: statusDetail.ns0#errorField
+						}
+					})
+				}
+			})
+		}		
+	}write "application/xml",
+	headers: {
+		header: {
+			correlationId: correlationId
+		}write "application/xml"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xml-module="http://www.mulesoft.org/schema/mule/xml-module" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/xml-module http://www.mulesoft.org/schema/mule/xml-module/current/mule-xml-module.xsd">
+	<sub-flow name="serviceProviderAvailabilitySub_Flow" doc:id="79509c2e-8271-414b-8cd5-ae1413be73ec" >
+		<ee:transform doc:name="spAvailability Request Mapping and Set Operation Name" doc:id="b67a85db-e6ea-4f2b-8a8b-f27584c0bce7" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://servicebench.com/serviceOrder/service/types
+ns ser http://www.homeserve.com/ServiceBench/
+---
+{
+	ns0#spAvailabilityRequest: {
+		ns0#version: payload.body.ser#spAvailabilityRequest.ser#version,
+		ns0#v4CrmVersion: payload.body.ser#spAvailabilityRequest.ser#v4CrmVersion,
+		ns0#sourceSystemName: payload.body.ser#spAvailabilityRequest.ser#sourceSystemName,
+		ns0#sourceSystemVersion: payload.body.ser#spAvailabilityRequest.ser#sourceSystemVersion,
+		ns0#availabilityRequest: {
+			ns0#requestControlID: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#requestControlID,
+			ns0#postalCode: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#postalCode replace " " with "",
+			ns0#merchandiseCode: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#merchandiseCode,
+			ns0#collateResponse: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#collateResponse,
+			ns0#startingDate: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#startingDate,
+			ns0#datesNeeded: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#datesNeeded,
+			ns0#programID: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#programID,
+			ns0#serviceProviderAccount: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#serviceProviderAccount,
+			ns0#availableRequestNum: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#availableRequestNum,
+			ns0#premiumFlag: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#premiumFlag,
+			ns0#recallNumber: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#recallNumber,
+			ns0#oem: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#oem,
+			ns0#serviceRequestType: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#serviceRequestType,
+			ns0#serviceJobType: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#serviceJobType,
+			ns0#serviceJobTypes: {
+				(payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#serviceJobTypes.*ser#serviceJobType map ( serviceJobType , indexOfServiceJobType ) -> {
+					ns0#serviceJobType: serviceJobType
+				})
+			},
+
+			(if(upper(payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#country) == "CANADA" or upper(payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#country) == "CAN"){
+				ns0#country: "CA"
+			}else if(upper(payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#country) == "USA") {
+				ns0#country: "US"
+			}else{
+				ns0#country: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#country
+			}),			
+			ns0#paymentType: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#paymentType,
+			ns0#unscheduledProviders: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#unscheduledProviders,
+			ns0#minimumPriorityRank: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#minimumPriorityRank,
+			(if(isEmpty(payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#programID)){
+			ns0#programOnly: "N"
+			}else{
+			ns0#programOnly:"Y"
+			}),
+			ns0#planType: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#planType,
+			ns0#storeNumber: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#storeNumber,
+			ns0#formatType: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#formatType,
+			ns0#services: {
+				(payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#services.*ser#service map ( service , indexOfService ) -> {
+					ns0#service: {
+						ns0#serviceRowNumber: service.ser#serviceRowNumber,
+						ns0#serviceID: service.ser#serviceID,
+						ns0#serviceTransactionNumber: service.ser#serviceTransactionNumber,
+						ns0#quantity: service.ser#quantity,
+						ns0#serviceStatus: service.ser#serviceStatus,
+						ns0#serviceStatusDate: service.ser#serviceStatusDate,
+						ns0#serviceNumber: service.ser#serviceNumber,
+						ns0#servicePurchaseDate: service.ser#servicePurchaseDate,
+						ns0#serviceProduct: service.ser#serviceProduct
+					}
+				})
+			},
+			ns0#models: {
+				(payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#models.*ser#model map ( model , indexOfModel ) -> {
+					ns0#model: {
+						ns0#productRowNumber: model.ser#productRowNumber,
+						ns0#productStatus: model.ser#productStatus,
+						ns0#productSubStatus: model.ser#productSubStatus,
+						ns0#productCode: model.ser#productCode,
+						ns0#oem: model.ser#oem,
+						ns0#productLine: model.ser#productLine,
+						ns0#merchandiseCode: model.ser#merchandiseCode,
+						ns0#modelID: model.ser#modelID,
+						ns0#brand: model.ser#brand,
+						ns0#serialNumber: model.ser#serialNumber,
+						ns0#serialNumberElectronic: model.ser#serialNumberElectronic,
+						ns0#purchaseDate: model.ser#purchaseDate,
+						ns0#purchasedFrom: model.ser#purchasedFrom,
+						ns0#contractPurchaseDate: model.ser#contractPurchaseDate,
+						ns0#contractNumber: model.ser#contractNumber,
+						ns0#serviceContractExpiryDate: model.ser#serviceContractExpiryDate,
+						ns0#purchasePrice: model.ser#purchasePrice,
+						ns0#authorizationNumber: model.ser#authorizationNumber,
+						ns0#authorizationAmount: model.ser#authorizationAmount,
+						ns0#pexSerialNumber: model.ser#pexSerialNumber,
+						ns0#pexModelId: model.ser#pexModelId,
+						ns0#pexBrand: model.ser#pexBrand,
+						ns0#pexPuchasePrice: model.ser#pexPuchasePrice,
+						ns0#pexUnitReceivedDate: model.ser#pexUnitReceivedDate,
+						ns0#pexExpectedDeliveryDate: model.ser#pexExpectedDeliveryDate,
+						ns0#pexDeliveredDate: model.ser#pexDeliveredDate,
+						ns0#failureDate: model.ser#failureDate,
+						ns0#productLineAmount: model.ser#productLineAmount,
+						ns0#productSize: model.ser#productSize,
+						ns0#shippingCompany: model.ser#shippingCompany,
+						ns0#shippingMethod: model.ser#shippingMethod,
+						ns0#modelVersion: model.ser#modelVersion,
+						ns0#warrantyInfo: model.ser#warrantyInfo,
+						ns0#laborWarrantyExpiryDate: model.ser#laborWarrantyExpiryDate,
+						ns0#partsWarrantyExpiryDate: model.ser#partsWarrantyExpiryDate,
+						ns0#unitLocation: model.ser#unitLocation
+					}
+				})
+			},
+			ns0#thirdPartyId: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#thirdPartyId,
+			ns0#selfServicingDealerNumber: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#selfServicingDealerNumber,
+			ns0#carryInRadius: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#carryInRadius,
+			ns0#parts: {
+				(payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#parts.*ser#part map ( part , indexOfPart ) -> {
+					ns0#part: {
+						ns0#productRowNumber: part.ser#productRowNumber,
+						ns0#lineNumber: part.ser#lineNumber,
+						ns0#partNumber: part.ser#partNumber,
+						ns0#partDescription: part.ser#partDescription,
+						ns0#quantity: part.ser#quantity,
+						ns0#partStatus: part.ser#partStatus,
+						ns0#partStatusDate: part.ser#partStatusDate,
+						ns0#partOrderedNumber: part.ser#partOrderedNumber,
+						ns0#invoiceNumber: part.ser#invoiceNumber,
+						ns0#shippingCompany: part.ser#shippingCompany,
+						ns0#trackingNumber: part.ser#trackingNumber,
+						ns0#partOrderDate: part.ser#partOrderDate,
+						ns0#partReceivedDate: part.ser#partReceivedDate,
+						ns0#partOrderETA: part.ser#partOrderETA,
+						ns0#serialNumber: part.ser#serialNumber,
+						ns0#electronicSerialNumber: part.ser#electronicSerialNumber,
+						ns0#saSourced: part.ser#saSourced
+					}
+				})
+			},
+			ns0#serviceJobNumber: payload.body.ser#spAvailabilityRequest.ser#availabilityRequest.ser#serviceJobNumber
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="operation" ><![CDATA["serviceProviderAvailability"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="ServiceBenchAPICall_SubFlow" doc:id="e9e8b10e-6fdb-4cb5-aa77-37a201de5622" name="ServiceBenchAPICallSub_Flow" />
+		<ee:transform doc:name="spAvailability Response Mapping" doc:id="f645ca16-343c-4118-885c-0ac38f8c98ad" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+ns ser http://www.homeserve.com/ServiceBench/
+ns ns0 http://servicebench.com/serviceOrder/service/types
+---
+{
+	body: {
+			ser#spAvailabilityResponse: {
+			ser#version: payload.body.ns0#spAvailabilityResponse.ns0#version,
+			ser#v4CrmVersion: payload.body.ns0#spAvailabilityResponse.ns0#v4CrmVersion,
+			ser#sourceSystemName: payload.body.ns0#spAvailabilityResponse.ns0#sourceSystemName,
+			ser#sourceSystemVersion: payload.body.ns0#spAvailabilityResponse.ns0#sourceSystemVersion,
+			ser#msgStatus: payload.body.ns0#spAvailabilityResponse.ns0#msgStatus,
+			
+			(if(payload.body.ns0#spAvailabilityResponse.ns0#msgStatus == "NORMAL"){
+			ser#availabilityResponse: {
+				ser#requestControlID: payload.body.ns0#spAvailabilityResponse.ns0#availabilityResponse.ns0#requestControlID,
+				ser#availabilityFound: payload.body.ns0#spAvailabilityResponse.ns0#availabilityResponse.ns0#availabilityFound,
+				ser#programID: payload.body.ns0#spAvailabilityResponse.ns0#availabilityResponse.ns0#programID,
+				ser#programMatched: payload.body.ns0#spAvailabilityResponse.ns0#availabilityResponse.ns0#programMatched,
+				ser#productCode: payload.body.ns0#spAvailabilityResponse.ns0#availabilityResponse.ns0#productCode,
+				ser#storeDistance: payload.body.ns0#spAvailabilityResponse.ns0#availabilityResponse.ns0#storeDistance,
+				ser#skuTime: payload.body.ns0#spAvailabilityResponse.ns0#availabilityResponse.ns0#skuTime,
+				ser#dates: {
+					(payload.body.ns0#spAvailabilityResponse.ns0#availabilityResponse.ns0#dates.*ns0#date map ( date , indexOfDate ) -> {
+						ser#date: {
+							ser#availableDate: date.ns0#availableDate,
+							ser#availableDay: date.ns0#availableDay,
+							ser#serviceProviders: {
+								(date.ns0#serviceProviders.*ns0#serviceProvider map ( serviceProvider , indexOfServiceProvider ) -> {
+									ser#serviceProvider: {
+										ser#serviceProviderAccount: serviceProvider.ns0#serviceProviderAccount,
+										ser#serviceProviderName: serviceProvider.ns0#serviceProviderName,
+										ser#serviceProviderAddress1: serviceProvider.ns0#serviceProviderAddress1,
+										ser#serviceProviderAddress2: serviceProvider.ns0#serviceProviderAddress2,
+										ser#serviceProviderCity: serviceProvider.ns0#serviceProviderCity,
+										ser#serviceProviderStateProvince: serviceProvider.ns0#serviceProviderStateProvince,
+										ser#serviceProviderPostalCode: serviceProvider.ns0#serviceProviderPostalCode,
+										ser#serviceProviderPhone: serviceProvider.ns0#serviceProviderPhone,
+										ser#serviceProviderLocationPhone: serviceProvider.ns0#serviceProviderLocationPhone,
+										ser#minimumServiceCharge: serviceProvider.ns0#minimumServiceCharge,
+										ser#unitType: serviceProvider.ns0#unitType,
+										ser#workAreaCode: serviceProvider.ns0#workAreaCode,
+										ser#pricingTier: serviceProvider.ns0#pricingTier,
+										ser#serviceProviderType: serviceProvider.ns0#serviceProviderType,
+										ser#generalInfo: serviceProvider.ns0#generalInfo,
+										ser#priorityLevel: serviceProvider.ns0#priorityLevel,
+										ser#priorityRank: serviceProvider.ns0#priorityRank,
+										ser#enabledForServiceJobType: serviceProvider.ns0#enabledForServiceJobType,
+										ser#serviceJobType: serviceProvider.ns0#serviceJobType,
+										ser#distance: serviceProvider.ns0#distance,
+										ser#additionalInfo: serviceProvider.ns0#additionalInfo,
+										ser#provideLabels: serviceProvider.ns0#provideLabels,
+										ser#boxesAvailable: serviceProvider.ns0#boxesAvailable,
+										ser#programAvailability: serviceProvider.ns0#programAvailability,
+										ser#businessHours: {
+											(serviceProvider.ns0#businessHours.*ns0#dayOfTheWeek map ( dayOfTheWeek , indexOfDayOfTheWeek ) -> {
+												ser#dayOfTheWeek: {
+													ser#day: dayOfTheWeek.ns0#day,
+													ser#fromHours: dayOfTheWeek.ns0#fromHours,
+													ser#toHours: dayOfTheWeek.ns0#toHours
+												}
+											})
+										},
+										ser#availabilityDates: {
+											(serviceProvider.ns0#availabilityDates.*ns0#availabilityDate map ( availabilityDate , indexOfAvailabilityDate ) -> {
+												ser#availabilityDate: {
+													ser#availableDate: availabilityDate.ns0#availableDate,
+													ser#availableDay: availabilityDate.ns0#availableDay,
+													ser#availableType: availabilityDate.ns0#availableType,
+													ser#slotStartTime: availabilityDate.ns0#slotStartTime,
+													ser#slotLength: availabilityDate.ns0#slotLength
+												}
+											})
+										},
+										ser#timeSlots: {
+											(serviceProvider.ns0#timeSlots.*ns0#timeSlot map ( timeSlot , indexOfTimeSlot ) -> {
+												ser#timeSlot: {
+													ser#availableType: timeSlot.ns0#availableType,
+													ser#slotStartTime: timeSlot.ns0#slotStartTime,
+													ser#slotLength: timeSlot.ns0#slotLength
+												}
+											})
+										},
+										ser#partsShipmentPreference: serviceProvider.ns0#partsShipmentPreference,
+										ser#timeZoneOffset: serviceProvider.ns0#timeZoneOffset,
+										ser#activeAnalyticsPriority: serviceProvider.ns0#activeAnalyticsPriority,
+										ser#availabilityDate: serviceProvider.ns0#availabilityDate,
+										ser#availabilityDay: serviceProvider.ns0#availabilityDay,
+										ser#priorityId: serviceProvider.ns0#priorityId
+									}
+								})
+							}
+						}
+					})
+				}
+			}
+		}
+		else{
+			ser#statusDetails: {
+				(payload.body.ns0#spAvailabilityResponse.ns0#statusDetails.*ns0#statusDetail map ( statusDetail , indexOfStatusDetail ) -> {
+					ser#statusDetail: {
+						ser#errorNo: statusDetail.ns0#errorNo,
+						ser#errorText: statusDetail.ns0#errorText,
+						ser#errorField: statusDetail.ns0#errorField
+					}
+				})
+			}
+		})
+		}		
+	}write "application/xml",
+	headers: {
+		header: {
+			correlationId: correlationId
+		}write "application/xml"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

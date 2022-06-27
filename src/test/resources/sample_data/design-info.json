@@ -1,0 +1,49 @@
+{
+  "sampleData": {
+    "6c5cdefc-4a69-4691-b64d-89472cbddc47": {
+      "payload": "sample_data/serviceproviderinforequest.xml"
+    },
+    "e2178415-8680-464e-b8ea-5032acec44a4": {
+      "payload": "sample_data/java.dwl"
+    },
+    "2b0f95de-3253-457f-982e-c79868a92106": {
+      "payload": "sample_data/serviceProviderInfoRequest_1.xml"
+    },
+    "eb3347e2-d649-46c9-b14e-a39f6c5469cf": {
+      "payload": "sample_data/serviceProviderInfoRequest_2.xml"
+    },
+    "7177108c-9ff2-4bad-bc33-7c978a7f542a": {
+      "payload": "sample_data/java_1.dwl"
+    },
+    "0eb274d7-dbb6-4fe7-852d-10de2cd5ee83": {
+      "payload": "sample_data/soapoutputenvelope.dwl"
+    },
+    "e7f013ac-c7de-4e34-b06e-6bdb11e036f1": {
+      "payload": "sample_data/spavailabilityrequest.xml"
+    },
+    "721a6b01-fdb6-4811-b34d-7d7a3cc3d7f0": {
+      "payload": "sample_data/spavailabilityresponse.xml"
+    },
+    "b20ee477-69ad-47cf-b991-f886af237792": {
+      "payload": "sample_data/serviceProviderInfoRequest_3.xml"
+    },
+    "4df5e196-7c31-4d72-a697-710d967f05b6": {
+      "payload": "sample_data/servicejobstatusrequest.xml"
+    },
+    "d136df90-3fe2-4d2b-bb68-f42c852b82ab": {
+      "payload": "sample_data/servicejobstatusresponse.xml"
+    },
+    "e52cd31e-542b-4f2b-9db8-3257524b3f16": {
+      "payload": "sample_data/java_2.dwl"
+    },
+    "195a854d-d8fb-4de1-af55-1afe1eccb99c": {
+      "payload": "sample_data/java_3.dwl"
+    },
+    "e9279413-e81e-4c4a-9c27-9b4cfc9c3244": {
+      "payload": "sample_data/java_4.dwl"
+    },
+    "047437ec-34f8-40aa-ac71-303faccf4185": {
+      "payload": "sample_data/name.xml"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "headers": {
+    
+  },
+  "attachments": {
+    
+  },
+  "body": {
+    "serviceProviderInfoRequest": {
+      "version": null,
+      "v4CrmVersion": null,
+      "sourceSystemName": "SB",
+      "sourceSystemVersion": "2.0",
+      "serviceProviderRequest": {
+        "requestControlID": null,
+        "serviceProviderAccount": "TDE423",
+        "serviceProviderName": null,
+        "serviceProviderAddress1": null,
+        "serviceProviderAddress2": null,
+        "serviceProviderCity": null,
+        "serviceProviderStateProvince": null,
+        "serviceProviderPostalCode": null,
+        "serviceProviderPhone": null
+      }
+    }
+  }
+}

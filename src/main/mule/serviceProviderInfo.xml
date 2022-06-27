@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xml-module="http://www.mulesoft.org/schema/mule/xml-module" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/xml-module http://www.mulesoft.org/schema/mule/xml-module/current/mule-xml-module.xsd">
+	<sub-flow name="serviceProviderInfoSub_Flow" doc:id="10477b73-04f0-49b3-bb7e-5554439da386" >
+		<ee:transform doc:name="serviceProviderInfo Request Mapping and Set Operation Name" doc:id="a6e6ea92-0f79-47f4-af85-e0e86beb254f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ser http://www.homeserve.com/ServiceBench/
+ns ns0 http://servicebench.com/serviceOrder/service/types
+---
+{
+	ns0#serviceProviderInfoRequest: {
+		ns0#version: payload.body.ser#serviceProviderInfoRequest.ser#version,
+		ns0#v4CrmVersion: payload.body.ser#serviceProviderInfoRequest.ser#v4CrmVersion,
+		ns0#sourceSystemName: payload.body.ser#serviceProviderInfoRequest.ser#sourceSystemName,
+		ns0#sourceSystemVersion: payload.body.ser#serviceProviderInfoRequest.ser#sourceSystemVersion,
+		ns0#serviceProviderRequest: {
+			ns0#requestControlID: payload.body.ser#serviceProviderInfoRequest.ser#serviceProviderRequest.ser#requestControlID,
+			ns0#serviceProviderAccount: payload.body.ser#serviceProviderInfoRequest.ser#serviceProviderRequest.ser#serviceProviderAccount,
+			ns0#serviceProviderName: payload.body.ser#serviceProviderInfoRequest.ser#serviceProviderRequest.ser#serviceProviderName,
+			ns0#serviceProviderAddress1: payload.body.ser#serviceProviderInfoRequest.ser#serviceProviderRequest.ser#serviceProviderAddress1,
+			ns0#serviceProviderAddress2: payload.body.ser#serviceProviderInfoRequest.ser#serviceProviderRequest.ser#serviceProviderAddress2,
+			ns0#serviceProviderCity: payload.body.ser#serviceProviderInfoRequest.ser#serviceProviderRequest.ser#serviceProviderCity,
+			ns0#serviceProviderStateProvince: payload.body.ser#serviceProviderInfoRequest.ser#serviceProviderRequest.ser#serviceProviderStateProvince,
+			ns0#serviceProviderPostalCode: payload.body.ser#serviceProviderInfoRequest.ser#serviceProviderRequest.ser#serviceProviderPostalCode,
+			ns0#serviceProviderPhone: payload.body.ser#serviceProviderInfoRequest.ser#serviceProviderRequest.ser#serviceProviderPhone
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="operation" ><![CDATA["serviceProviderInfo"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="ServiceBenchAPICall_SubFlow" doc:id="0044184e-5cd7-475c-baaf-b69c45308751" name="ServiceBenchAPICallSub_Flow" />
+		<ee:transform doc:name="serviceProviderInfo Response Mapping" doc:id="af16a277-266d-416d-ae99-ea29b5368933" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+ns ser http://www.homeserve.com/ServiceBench/
+ns ns0 http://servicebench.com/serviceOrder/service/types
+---
+{
+	body: {
+			ser#serviceProviderInfoResponse: {
+			ser#version: payload.body.ns0#serviceProviderInfoResponse.ns0#version,
+			ser#v4CrmVersion: payload.body.ns0#serviceProviderInfoResponse.ns0#v4CrmVersion,
+			ser#sourceSystemName: payload.body.ns0#serviceProviderInfoResponse.ns0#sourceSystemName,
+			ser#sourceSystemVersion: payload.body.ns0#serviceProviderInfoResponse.ns0#sourceSystemVersion,
+			ser#msgStatus: payload.body.ns0#serviceProviderInfoResponse.ns0#msgStatus,
+			(if ( payload.body.ns0#serviceProviderInfoResponse.ns0#msgStatus == "NORMAL" ) {
+				ser#serviceProviderResponse: {
+					ser#requestControlID: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#requestControlID,
+					ser#searchResultStatus: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#searchResultStatus,
+					ser#serviceProviderAccount: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderAccount,
+					ser#serviceProviderType: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderType,
+					ser#serviceProviderName: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderName,
+					ser#serviceProviderAddress1: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderAddress1,
+					ser#serviceProviderAddress2: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderAddress2,
+					ser#serviceProviderCity: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderCity,
+					ser#serviceProviderStateProvince: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderStateProvince,
+					ser#serviceProviderPostalCode: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderPostalCode,
+					ser#serviceProviderPhone: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderPhone,
+					ser#serviceProviderAltPhone: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderAltPhone,
+					ser#serviceProviderEmergencyPhone: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderEmergencyPhone,
+					ser#serviceProviderContactFax: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderContactFax,
+					ser#serviceProviderMobileNumber: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderMobileNumber,
+					ser#serviceProviderCountry: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderCountry,
+					ser#minimumServiceCharge: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#minimumServiceCharge,
+					ser#comments: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#comments,
+					ser#contactName: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#contactName,
+					ser#boxesAvailable: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#boxesAvailable,
+					ser#mailingLabels: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#mailingLabels,
+					ser#serviceJobTypes: {
+						(payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceJobTypes.*ns0#serviceJobType map ( serviceJobType , indexOfServiceJobType ) -> {
+							ser#serviceJobType: {
+								ser#serviceJobTypeCode: serviceJobType.ns0#serviceJobTypeCode,
+								ser#enabledforServiceJob: serviceJobType.ns0#enabledforServiceJob,
+								ser#priorityLevel: serviceJobType.ns0#priorityLevel,
+								ser#priorityRank: serviceJobType.ns0#priorityRank,
+								ser#reworkDays: serviceJobType.ns0#reworkDays
+							}
+						})
+					},
+					ser#businessHours: {
+						(payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#businessHours.*ns0#dayOfTheWeek map ( dayOfTheWeek , indexOfDayOfTheWeek ) -> {
+							ser#dayOfTheWeek: {
+								ser#day: dayOfTheWeek.ns0#day,
+								ser#fromHours: dayOfTheWeek.ns0#fromHours,
+								ser#toHours: dayOfTheWeek.ns0#toHours
+							}
+						})
+					},
+					ser#serviceProviderEmails: {
+						ser#serviceProviderContactEmail: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderEmails.ns0#serviceProviderContactEmail,
+						ser#serviceProviderManagementEmail: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderEmails.ns0#serviceProviderManagementEmail,
+						ser#serviceProviderPaymentEmail: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderEmails.ns0#serviceProviderPaymentEmail,
+						ser#serviceProviderNewsEmail: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceProviderEmails.ns0#serviceProviderNewsEmail
+					},
+					ser#locations: {
+						(payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#locations.*ns0#location map ( location , indexOfLocation ) -> {
+							ser#location: {
+								ser#locationID: location.ns0#locationID,
+								ser#locationPhone: location.ns0#locationPhone,
+								ser#locationEmails: {
+									(location.ns0#locationEmails.*ns0#locationEmail map ( locationEmail , indexOfLocationEmail ) -> {
+										ser#locationEmail: {
+											ser#emailType: locationEmail.ns0#emailType,
+											ser#emailAddress: locationEmail.ns0#emailAddress
+										}
+									})
+								}
+							}
+						})
+					},
+					ser#rateAmountsAvailable: payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#rateAmountsAvailable,
+					ser#serviceAdministratorData: {
+						(payload.body.ns0#serviceProviderInfoResponse.ns0#serviceProviderResponse.ns0#serviceAdministratorData.*ns0#serviceAdministratorDataValues map ( serviceAdministratorDataValue , indexOfServiceAdministratorDataValue ) -> {
+							ser#serviceAdministratorDataValues: {
+								ser#serviceAdministratorValueName: serviceAdministratorDataValue.ns0#serviceAdministratorValueName,
+								ser#serviceAdministratorValueData: serviceAdministratorDataValue.ns0#serviceAdministratorValueData
+							}
+						})
+					}
+				}
+			}
+		else{
+				ser#statusDetails: {
+					(payload.body.ns0#serviceProviderInfoResponse.ns0#statusDetails.*ns0#statusDetail map ( statusDetail , indexOfStatusDetail ) -> {
+						ser#statusDetail: {
+							ser#errorNo: statusDetail.ns0#errorNo,
+							ser#errorText: statusDetail.ns0#errorText,
+							ser#errorField: statusDetail.ns0#errorField
+						}
+					})
+				}
+			})
+		}		
+	}write "application/xml",
+	headers: {
+		header: {
+			correlationId: correlationId
+		}write "application/xml"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

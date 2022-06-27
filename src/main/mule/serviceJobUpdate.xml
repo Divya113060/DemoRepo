@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="serviceJobUpdateSub_Flow" doc:id="a545d3c8-9fc5-4454-ac82-4359109ff62d" >
+		<ee:transform doc:name="serviceJobUpdate Request Mapping and Set OperationName" doc:id="ff3010f1-776f-4c57-84b1-514fb9e13cbb" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://servicebench.com/serviceOrder/service/types
+ns ser http://www.homeserve.com/ServiceBench/
+---
+{
+	ns0#serviceJobUpdateRequest: {
+		ns0#version: payload.body.ser#serviceJobUpdateRequest.ser#version,
+		ns0#v4CrmVersion: payload.body.ser#serviceJobUpdateRequest.ser#v4CrmVersion,
+		ns0#sourceSystemName: payload.body.ser#serviceJobUpdateRequest.ser#sourceSystemName,
+		ns0#sourceSystemVersion: payload.body.ser#serviceJobUpdateRequest.ser#sourceSystemVersion,
+		ns0#updateRequest: {
+			ns0#requestControlID: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#requestControlID,
+			ns0#serviceOrderID: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#serviceOrderID,
+			ns0#serviceOrderDate: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#serviceOrderDate,
+			ns0#serviceOrderStatus: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#serviceOrderStatus,
+			ns0#partstatus: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#partstatus,
+			ns0#serviceOrderStatusDate: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#serviceOrderStatusDate,
+			ns0#companyName: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#companyName,
+			ns0#lastName: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#lastName,
+			ns0#firstName: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#firstName,
+			ns0#address1: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#address1,
+			ns0#address2: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#address2,
+			ns0#address3: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#address3,
+			ns0#city: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#city,
+			ns0#stateProvince: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#stateProvince,
+			ns0#postalCode: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#postalCode,
+			ns0#country: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#country,
+			ns0#homePhone: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#homePhone,
+			ns0#workPhone: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#workPhone,
+			ns0#mobilePhone: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#mobilePhone,
+			ns0#alternatePhone: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#alternatePhone,
+			ns0#emailAddress: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#emailAddress,
+			ns0#alternateEmailAddress: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#alternateEmailAddress,
+			ns0#accountAddress1: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#accountAddress1,
+			ns0#accountAddress2: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#accountAddress2,
+			ns0#accountCity: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#accountCity,
+			ns0#accountStateProvince: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#accountStateProvince,
+			ns0#accountPostalCode: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#accountPostalCode,
+			ns0#accountCountry: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#accountCountry,
+			ns0#accountPhone: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#accountPhone,
+			ns0#accountWorkPhone: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#accountWorkPhone,
+			ns0#accountAlternatePhone: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#accountAlternatePhone,
+			ns0#preferredContactMethod: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#preferredContactMethod,
+			ns0#primaryPhoneNumber: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#primaryPhoneNumber,
+			ns0#directionsCrossStreets: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#directionsCrossStreets,
+			ns0#serviceDescription: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#serviceDescription,
+			ns0#serviceJobID: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#serviceJobID,
+			ns0#crmNumber: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#crmNumber,
+			ns0#paymentType: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#paymentType,
+			ns0#paymentTerms: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#paymentTerms,
+			ns0#specialInstructions: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#specialInstructions,
+			ns0#buyoutCode: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#buyoutCode,
+			ns0#serviceJobSubStatus: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#serviceJobSubStatus,
+			ns0#complaintCode: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#complaintCode,
+			ns0#requestedCompletionDate: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#requestedCompletionDate,
+			ns0#requestCompletionTime: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#requestCompletionTime,
+			ns0#mailingLabelMethod: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#mailingLabelMethod,
+			ns0#purchasedFrom: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#purchasedFrom,
+			ns0#productSize: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#productSize,
+			ns0#storeNumber: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#storeNumber,
+			ns0#productPickupLocation: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#productPickupLocation,
+			ns0#posStoreNumber: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#posStoreNumber,
+			ns0#posTransactionNumber: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#posTransactionNumber,
+			ns0#posTerminalNumber: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#posTerminalNumber,
+			ns0#posRetailerRefNumber: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#posRetailerRefNumber,
+			ns0#posPersonSelling: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#posPersonSelling,
+			ns0#posSaleDate: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#posSaleDate,
+			ns0#posSaleTime: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#posSaleTime,
+			ns0#authorizationNumber: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#authorizationNumber,
+			ns0#authorizationAmount: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#authorizationAmount,
+			ns0#boxSentDate: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#boxSentDate,
+			ns0#labelSentDate: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#labelSentDate,
+			ns0#productReceivedDate: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#productReceivedDate,
+			ns0#productReturnedDate: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#productReturnedDate,
+			ns0#technicianName: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#technicianName,
+			ns0#technicianPhone: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#technicianPhone,
+			ns0#comment: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#comment,
+			ns0#commentType: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#commentType,
+			ns0#externalUserId: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#externalUserId,
+			ns0#serviceRequestType: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#serviceRequestType,
+			ns0#serviceCategory: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#serviceCategory,
+			ns0#models: {
+				(payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#models.*ser#model map ( model , indexOfModel ) -> {
+					ns0#model: {
+						ns0#productRowNumber: model.ser#productRowNumber,
+						ns0#productStatus: model.ser#productStatus,
+						ns0#productSubStatus: model.ser#productSubStatus,
+						ns0#productCode: model.ser#productCode,
+						ns0#oem: model.ser#oem,
+						ns0#productLine: model.ser#productLine,
+						ns0#merchandiseCode: model.ser#merchandiseCode,
+						ns0#modelID: model.ser#modelID,
+						ns0#brand: model.ser#brand,
+						ns0#serialNumber: model.ser#serialNumber,
+						ns0#serialNumberElectronic: model.ser#serialNumberElectronic,
+						ns0#purchaseDate: model.ser#purchaseDate,
+						ns0#purchasedFrom: model.ser#purchasedFrom,
+						ns0#contractPurchaseDate: model.ser#contractPurchaseDate,
+						ns0#contractNumber: model.ser#contractNumber,
+						ns0#serviceContractExpiryDate: model.ser#serviceContractExpiryDate,
+						ns0#purchasePrice: model.ser#purchasePrice,
+						ns0#authorizationNumber: model.ser#authorizationNumber,
+						ns0#authorizationAmount: model.ser#authorizationAmount,
+						ns0#pexSerialNumber: model.ser#pexSerialNumber,
+						ns0#pexModelId: model.ser#pexModelId,
+						ns0#pexBrand: model.ser#pexBrand,
+						ns0#pexPuchasePrice: model.ser#pexPuchasePrice,
+						ns0#pexUnitReceivedDate: model.ser#pexUnitReceivedDate,
+						ns0#pexExpectedDeliveryDate: model.ser#pexExpectedDeliveryDate,
+						ns0#pexDeliveredDate: model.ser#pexDeliveredDate,
+						ns0#failureDate: model.ser#failureDate,
+						ns0#productLineAmount: model.ser#productLineAmount,
+						ns0#productSize: model.ser#productSize,
+						ns0#shippingCompany: model.ser#shippingCompany,
+						ns0#shippingMethod: model.ser#shippingMethod,
+						ns0#modelVersion: model.ser#modelVersion,
+						ns0#warrantyInfo: model.ser#warrantyInfo,
+						ns0#laborWarrantyExpiryDate: model.ser#laborWarrantyExpiryDate,
+						ns0#partsWarrantyExpiryDate: model.ser#partsWarrantyExpiryDate,
+						ns0#unitLocation: model.ser#unitLocation
+					}
+				})
+			},
+			ns0#parts: {
+				(payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#parts.*ser#part map ( part , indexOfPart ) -> {
+					ns0#part: {
+						ns0#productRowNumber: part.ser#productRowNumber,
+						ns0#lineNumber: part.ser#lineNumber,
+						ns0#partNumber: part.ser#partNumber,
+						ns0#partDescription: part.ser#partDescription,
+						ns0#quantity: part.ser#quantity,
+						ns0#partStatus: part.ser#partStatus,
+						ns0#partStatusDate: part.ser#partStatusDate,
+						ns0#partOrderedNumber: part.ser#partOrderedNumber,
+						ns0#invoiceNumber: part.ser#invoiceNumber,
+						ns0#shippingCompany: part.ser#shippingCompany,
+						ns0#trackingNumber: part.ser#trackingNumber,
+						ns0#partOrderDate: part.ser#partOrderDate,
+						ns0#partReceivedDate: part.ser#partReceivedDate,
+						ns0#partOrderETA: part.ser#partOrderETA,
+						ns0#serialNumber: part.ser#serialNumber,
+						ns0#electronicSerialNumber: part.ser#electronicSerialNumber,
+						ns0#saSourced: part.ser#saSourced
+					}
+				})
+			},
+			ns0#mailIns: {
+				(payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#mailIns.*ser#mailIn map ( mailIn , indexOfMailIn ) -> {
+					ns0#mailIn: {
+						ns0#shippedItem: mailIn.ser#shippedItem,
+						ns0#status: mailIn.ser#status,
+						ns0#shipper: mailIn.ser#shipper,
+						ns0#trackingNumber: mailIn.ser#trackingNumber,
+						ns0#note: mailIn.ser#note,
+						ns0#mailingLabelURL: mailIn.ser#mailingLabelURL
+					}
+				})
+			},
+			ns0#services: {
+				(payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#services.*ser#service map ( service , indexOfService ) -> {
+					ns0#service: {
+						ns0#serviceRowNumber: service.ser#serviceRowNumber,
+						ns0#serviceID: service.ser#serviceID,
+						ns0#serviceTransactionNumber: service.ser#serviceTransactionNumber,
+						ns0#quantity: service.ser#quantity,
+						ns0#serviceStatus: service.ser#serviceStatus,
+						ns0#serviceStatusDate: service.ser#serviceStatusDate,
+						ns0#serviceNumber: service.ser#serviceNumber,
+						ns0#servicePurchaseDate: service.ser#servicePurchaseDate,
+						ns0#serviceProduct: service.ser#serviceProduct
+					}
+				})
+			},
+			ns0#productComponents: {
+				ns0#actionRequired: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#productComponents.ser#actionRequired,
+				(payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#productComponents.*ser#component map ( component , indexOfComponent ) -> {
+					ns0#component: {
+						ns0#rowNumber: component.ser#rowNumber,
+						ns0#componentNumber: component.ser#componentNumber,
+						ns0#serialNumber: component.ser#serialNumber,
+						ns0#quantities: {
+							(component.ser#quantities.*ser#quantityInfo map ( quantityInfo , indexOfQuantityInfo ) -> {
+								ns0#quantityInfo: {
+									ns0#quantityType: quantityInfo.ser#quantityType,
+									ns0#quantity: quantityInfo.ser#quantity
+								}
+							})
+						}
+					}
+				})
+			},
+			ns0#originalCrmNumber: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#originalCrmNumber,
+			ns0#serviceType: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#serviceType,
+			ns0#supportingInformation: {
+				(payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#supportingInformation.*ser#supportInformation map ( supportInformation , indexOfSupportInformation ) -> {
+					ns0#supportInformation: {
+						ns0#supportData: supportInformation.ser#supportData,
+						ns0#supportDataDescription: supportInformation.ser#supportDataDescription
+					}
+				})
+			},
+			ns0#transactionTypes: {
+				(payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#transactionTypes.*ser#transactionType map ( transactionType , indexOfTransactionType ) -> {
+					ns0#transactionType: {
+						ns0#transactionTypeCode: transactionType.ser#transactionTypeCode,
+						ns0#transactionDescription: transactionType.ser#transactionDescription
+					}
+				})
+			},
+			ns0#appointmentReference: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#appointmentReference,
+			ns0#administrationFee: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#administrationFee,
+			ns0#administrationFeeTax: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#administrationFeeTax,
+			ns0#estimatedRepairAmount: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#estimatedRepairAmount,
+			ns0#totalEstimatedTax: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#totalEstimatedTax,
+			ns0#slaTracked: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#slaTracked,
+			ns0#slaDays: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#slaDays,
+			ns0#slaHours: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#slaHours,
+			ns0#slaMinutes: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#slaMinutes,
+			ns0#serviceJobStatus: payload.body.ser#serviceJobUpdateRequest.ser#updateRequest.ser#serviceJobStatus
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="operation" ><![CDATA["serviceJobUpdate"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="ServiceBenchAPICall_SubFlow" doc:id="d9fca7c9-ab43-4589-948b-971cd62e5d5d" name="ServiceBenchAPICallSub_Flow"/>
+		<ee:transform doc:name="serviceJobUpdate Response Mapping" doc:id="ef84ecd1-d589-4899-a929-e574ef291e7d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+ns ser http://www.homeserve.com/ServiceBench/
+ns ns0 http://servicebench.com/serviceOrder/service/types
+---
+{
+	body: {
+				ser#serviceJobUpdateResponse: {
+				ser#version: payload.body.ns0#serviceJobUpdateResponse.ns0#version,
+				ser#v4CrmVersion: payload.body.ns0#serviceJobUpdateResponse.ns0#v4CrmVersion,
+				ser#sourceSystemName: payload.body.ns0#serviceJobUpdateResponse.ns0#sourceSystemName,
+				ser#sourceSystemVersion: payload.body.ns0#serviceJobUpdateResponse.ns0#sourceSystemVersion,
+				ser#msgStatus: payload.body.ns0#serviceJobUpdateResponse.ns0#msgStatus,
+				(if(payload.body.ns0#serviceJobUpdateResponse.ns0#msgStatus =="NORMAL"){
+				ser#updateResponse: {
+					ser#requestControlID: payload.body.ns0#serviceJobUpdateResponse.ns0#updateResponse.ns0#requestControlID,
+					ser#serviceOrderID: payload.body.ns0#serviceJobUpdateResponse.ns0#updateResponse.ns0#serviceOrderID,
+					ser#serviceJobID: payload.body.ns0#serviceJobUpdateResponse.ns0#updateResponse.ns0#serviceJobID
+				}
+			}else{
+				ser#statusDetails: {
+					(payload.body.ns0#serviceJobUpdateResponse.ns0#statusDetails.*ns0#statusDetail map ( statusDetail , indexOfStatusDetail ) -> {
+						ser#statusDetail: {
+							ser#errorNo: statusDetail.ns0#errorNo,
+							ser#errorText: statusDetail.ns0#errorText,
+							ser#errorField: statusDetail.ns0#errorField
+						}
+					})
+				}
+			})
+		}		
+	}write "application/xml",
+	headers: {
+		header: {
+			correlationId: correlationId
+		}write "application/xml"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

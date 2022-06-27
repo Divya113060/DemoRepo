@@ -1,0 +1,35 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://www.homeserve.com/ServiceBench/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <ser:serviceProviderInfoRequest>
+         <!--Optional:-->
+         <ser:version></ser:version>
+         <!--Optional:-->
+         <ser:v4CrmVersion></ser:v4CrmVersion>
+         <!--Optional:-->
+         <ser:sourceSystemName>SB</ser:sourceSystemName>
+         <!--Optional:-->
+         <ser:sourceSystemVersion>2.0</ser:sourceSystemVersion>
+         <ser:serviceProviderRequest>
+            <!--Optional:-->
+            <ser:requestControlID></ser:requestControlID>
+            <!--Optional:-->
+            <ser:serviceProviderAccount>TDE423</ser:serviceProviderAccount>
+            <!--Optional:-->
+            <ser:serviceProviderName></ser:serviceProviderName>
+            <!--Optional:-->
+            <ser:serviceProviderAddress1></ser:serviceProviderAddress1>
+            <!--Optional:-->
+            <ser:serviceProviderAddress2></ser:serviceProviderAddress2>
+            <!--Optional:-->
+            <ser:serviceProviderCity></ser:serviceProviderCity>
+            <!--Optional:-->
+            <ser:serviceProviderStateProvince></ser:serviceProviderStateProvince>
+            <!--Optional:-->
+            <ser:serviceProviderPostalCode></ser:serviceProviderPostalCode>
+            <!--Optional:-->
+            <ser:serviceProviderPhone></ser:serviceProviderPhone>
+         </ser:serviceProviderRequest>
+      </ser:serviceProviderInfoRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

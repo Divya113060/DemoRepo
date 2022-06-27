@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:xml-module="http://www.mulesoft.org/schema/mule/xml-module" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/xml-module http://www.mulesoft.org/schema/mule/xml-module/current/mule-xml-module.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="ServiceBenchAPICallSub_Flow" doc:id="1d533dce-d2ed-4527-a940-96d4302ef266" >
+		<ee:transform doc:name="Remove Null Values" doc:id="59f8491c-61b0-4bd6-9ac5-67bc5c195383" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+import modules::removeNull
+output application/xml
+---
+removeNull::removeNullValues(payload)]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<json-logger:logger doc:name="Request to Service Bench API" doc:id="a9d89ee8-6879-4251-90ed-9d365ba39908" config-ref="JSON_Logger_Config" message='#["Request to Service Bench API"]' tracePoint="BEFORE_REQUEST"/>
+		<wsc:consume operation="#[vars.operation]" doc:name="Invoke ServiceBenchAPI" doc:id="4c55b114-6816-442e-8715-50b734d1d6fd" config-ref="ServiceBenchAPIConsume">
+			<wsc:message >
+				<wsc:headers ><![CDATA[#[%dw 2.0
+output application/xml
+ns envelope http://schemas.xmlsoap.org/soap/envelope/
+ns soap http://schemas.xmlsoap.org/soap/envelope/
+ns wsse http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd
+---
+headers:{
+soap#Header: {
+wsse#Security: {
+wsse#UsernameToken: {
+wsse#Username: p('servicebench.username'),
+wsse#Password: p('secure::servicebench.password')
+}
+}
+}
+}]]]></wsc:headers>
+			</wsc:message>
+		</wsc:consume>
+		<json-logger:logger doc:name="Response from Service Bench API" doc:id="e9850483-332c-42bf-aac4-16e29b0a111b" config-ref="JSON_Logger_Config" message='#["Response from Service Bench API"]' tracePoint="AFTER_REQUEST"/>
+	</sub-flow>
+</mule>

@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:spAvailabilityResponse xmlns:ns0="http://servicebench.com/serviceOrder/service/types">
+  <ns0:version>veniam,</ns0:version>
+  <ns0:v4CrmVersion>in</ns0:v4CrmVersion>
+  <ns0:sourceSystemName>adipisci</ns0:sourceSystemName>
+  <ns0:sourceSystemVersion>Ut</ns0:sourceSystemVersion>
+  <ns0:msgStatus>velit</ns0:msgStatus>
+  <ns0:statusDetails>
+    <ns0:statusDetail/>
+    <ns0:statusDetail/>
+  </ns0:statusDetails>
+  <ns0:availabilityResponse>
+    <ns0:requestControlID>960256b130414d5485b</ns0:requestControlID>
+    <ns0:availabilityFound>nulla</ns0:availabilityFound>
+    <ns0:programID>f8373f8bdeb444d59da</ns0:programID>
+    <ns0:programMatched>exercitationem</ns0:programMatched>
+    <ns0:productCode>ullam</ns0:productCode>
+    <ns0:storeDistance>in</ns0:storeDistance>
+    <ns0:skuTime>occaecat</ns0:skuTime>
+    <ns0:dates/>
+    <ns0:serviceProviders/>
+    <ns0:serviceJobTypes/>
+  </ns0:availabilityResponse>
+</ns0:spAvailabilityResponse>

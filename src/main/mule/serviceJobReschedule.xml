@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="serviceJobRescheduleSub_Flow" doc:id="bff306c9-96a2-43d6-be71-c96c556e0512" >
+		<ee:transform doc:name="Reschedule Request Mapping and Set operationName" doc:id="243efe7a-fd7f-46b8-8d49-f375811d6ea4" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://servicebench.com/serviceOrder/service/types
+ns ser http://www.homeserve.com/ServiceBench/
+---
+{
+	ns0#serviceJobRescheduleRequest: {
+		ns0#version: payload.body.ser#serviceJobRescheduleRequest.ser#version,
+		ns0#v4CrmVersion: payload.body.ser#serviceJobRescheduleRequest.ser#v4CrmVersion,
+		ns0#sourceSystemName: payload.body.ser#serviceJobRescheduleRequest.ser#sourceSystemName,
+		ns0#sourceSystemVersion: payload.body.ser#serviceJobRescheduleRequest.ser#sourceSystemVersion,
+		ns0#rescheduleRequest: {
+			ns0#requestControlID: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#requestControlID,
+			ns0#serviceJobID: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#serviceJobID,
+			ns0#serviceProviderAccount: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#serviceProviderAccount,
+			ns0#programMatched: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#programMatched,
+			ns0#programID: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#programID,
+			ns0#availableDate: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#availableDate,
+			ns0#availableType: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#availableType,
+			ns0#slotStartTime: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#slotStartTime,
+			ns0#slotLength: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#slotLength,
+			ns0#rescheduleReason: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#rescheduleReason,
+			ns0#rescheduleReasonCode: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#rescheduleReasonCode,
+			ns0#authorizationNumber: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#authorizationNumber,
+			ns0#forceBooked: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#forceBooked,
+			ns0#serviceProviderUser: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#serviceProviderUser,
+			ns0#saAuthorizingUser: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#saAuthorizingUser,
+			ns0#thirdPartyID: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#thirdPartyID,
+			ns0#serviceJobType: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#serviceJobType,
+			ns0#appointmentReference: payload.body.ser#serviceJobRescheduleRequest.ser#rescheduleRequest.ser#appointmentReference
+		}
+	}
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="operation" ><![CDATA['serviceJobReschedule']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="ServiceBenchAPICall_SubFlow" doc:id="74e748fa-477d-4b03-964d-7d133bb912f2" name="ServiceBenchAPICallSub_Flow"/>
+		<ee:transform doc:name="Reschedule Response Mapping" doc:id="366f8259-3cea-4bc3-8635-dc9b262eaa4e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+ns ser http://www.homeserve.com/ServiceBench/
+ns ns0 http://servicebench.com/serviceOrder/service/types
+---
+{
+	body: {
+			ser#serviceJobRescheduleResponse: {
+			ser#version: payload.body.ns0#serviceJobRescheduleResponse.ns0#version,
+			ser#v4CrmVersion: payload.body.ns0#serviceJobRescheduleResponse.ns0#v4CrmVersion,
+			ser#sourceSystemName: payload.body.ns0#serviceJobRescheduleResponse.ns0#sourceSystemName,
+			ser#sourceSystemVersion: payload.body.ns0#serviceJobRescheduleResponse.ns0#sourceSystemVersion,
+			ser#msgStatus: payload.body.ns0#serviceJobRescheduleResponse.ns0#msgStatus,
+			
+			(if(payload.body.ns0#serviceJobRescheduleResponse.ns0#msgStatus == "NORMAL"){
+			ser#rescheduleResponse: {
+				ser#requestControlID: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#requestControlID,
+				ser#oldServiceJobID: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#oldServiceJobID,
+				ser#newServiceJobID: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#newServiceJobID,
+				ser#serviceProviderAccount: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#serviceProviderAccount,
+				ser#serviceProviderName: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#serviceProviderName,
+				ser#serviceProviderAddress1: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#serviceProviderAddress1,
+				ser#serviceProviderAddress2: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#serviceProviderAddress2,
+				ser#serviceProviderCity: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#serviceProviderCity,
+				ser#serviceProviderStateProvince: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#serviceProviderStateProvince,
+				ser#serviceProviderPostalCode: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#serviceProviderPostalCode,
+				ser#serviceProviderCountry: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#serviceProviderCountry,
+				ser#serviceProviderPhone: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#serviceProviderPhone,
+				ser#rescheduleReasonCode: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#rescheduleReasonCode,
+				ser#authorizationNumber: payload.body.ns0#serviceJobRescheduleResponse.ns0#rescheduleResponse.ns0#authorizationNumber
+			}
+			}else{
+			
+			ser#statusDetails: {
+				(payload.body.ns0#serviceJobRescheduleResponse.ns0#statusDetails.*ns0#statusDetail map ( statusDetail , indexOfStatusDetail ) -> {
+					ser#statusDetail: {
+						ser#errorNo: statusDetail.ns0#errorNo,
+						ser#errorText: statusDetail.ns0#errorText,
+						ser#errorField: statusDetail.ns0#errorField
+					}
+				})
+			}
+		})
+		}		
+	}write "application/xml",
+	headers: {
+		header: {
+			correlationId: correlationId
+		}write "application/xml"
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>

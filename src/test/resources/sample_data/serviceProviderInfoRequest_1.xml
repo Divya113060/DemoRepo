@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:serviceProviderInfoRequest xmlns:ns0="http://www.homeserve.com/ServiceBench/">
+  <ns0:version>qui</ns0:version>
+  <ns0:v4CrmVersion>ea</ns0:v4CrmVersion>
+  <ns0:sourceSystemName>minim</ns0:sourceSystemName>
+  <ns0:sourceSystemVersion>eaque</ns0:sourceSystemVersion>
+  <ns0:serviceProviderRequest>
+    <ns0:requestControlID>5efe01be1b7e4dcd848</ns0:requestControlID>
+    <ns0:serviceProviderAccount>sit</ns0:serviceProviderAccount>
+    <ns0:serviceProviderName>adipisci</ns0:serviceProviderName>
+    <ns0:serviceProviderAddress1>velit,</ns0:serviceProviderAddress1>
+    <ns0:serviceProviderAddress2>iure</ns0:serviceProviderAddress2>
+    <ns0:serviceProviderCity>et</ns0:serviceProviderCity>
+    <ns0:serviceProviderStateProvince>reprehenderit</ns0:serviceProviderStateProvince>
+    <ns0:serviceProviderPostalCode>aliquip</ns0:serviceProviderPostalCode>
+    <ns0:serviceProviderPhone>(416)-104-2829</ns0:serviceProviderPhone>
+  </ns0:serviceProviderRequest>
+</ns0:serviceProviderInfoRequest>

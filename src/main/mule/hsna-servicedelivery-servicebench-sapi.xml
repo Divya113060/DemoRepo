@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mule xmlns:xml-module="http://www.mulesoft.org/schema/mule/xml-module" xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit-soap="http://www.mulesoft.org/schema/mule/apikit-soap" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/apikit-soap http://www.mulesoft.org/schema/mule/apikit-soap/current/mule-apikit-soap.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/xml-module http://www.mulesoft.org/schema/mule/xml-module/current/mule-xml-module.xsd">
+	<flow name="api-main">
+        <http:listener path="${api.path}" config-ref="api-httpListenerConfig" outputMimeType="application/xml" doc:name="/services/1.1/ServiceBench" doc:id="047437ec-34f8-40aa-ac71-303faccf4185">
+            <http:response statusCode="#[attributes.additionalTransportData.statusCode default 200]">
+				<http:headers><![CDATA[#[output application/java
+---
+{
+	"correlationId" : correlationId
+}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[attributes.additionalTransportData.statusCode default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[attributes.protocolHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+		<apikit-soap:router outputMimeType="application/xml" config-ref="soapkit-config">
+			<apikit-soap:attributes ><![CDATA[#[%dw 2.0
+              output application/java
+              ---
+              {
+                  headers: attributes.headers,
+                  method: attributes.method,
+                  queryString: attributes.queryString
+            }]]]></apikit-soap:attributes>
+        </apikit-soap:router>
+		<error-handler ref="framework.SourceExceptionHandler" />
+    </flow>
+    <flow name="serviceJobSchedule:\soapkit-config">
+		<flow-ref doc:name="serviceJobSchedule_SubFlow" doc:id="213ea838-3a3a-4f28-ae4b-754758472062" name="serviceJobScheduleSub_Flow"/>
+		<error-handler ref="framework.SourceExceptionHandler" />
+    </flow>
+	<flow name="serviceProviderInfo:\soapkit-config">
+		<flow-ref doc:name="serviceProviderInfo_SubFlow" doc:id="49d8573b-b4aa-431e-9766-959c9cb013de" name="serviceProviderInfoSub_Flow"/>
+		<error-handler ref="framework.SourceExceptionHandler" />
+    </flow>
+	<flow name="serviceJobDownload:\soapkit-config">
+		<flow-ref doc:name="serviceJobDownload_SubFlow" doc:id="86f7ac64-e9ca-4d3a-bcce-fa3d617162d4" name="serviceJobDownloadSub_Flow"/>
+		<error-handler ref="framework.SourceExceptionHandler" />
+    </flow>
+    <flow name="serviceProviderAvailability:\soapkit-config" doc:id="b8bcf507-f2fa-49d1-84ae-d4b373b13307" >
+		<flow-ref doc:name="serviceProviderAvailability_SubFlow" doc:id="fb92d718-d6f2-44d2-9f4f-04dd9c7d72ef" name="serviceProviderAvailabilitySub_Flow"/>
+		<error-handler ref="framework.SourceExceptionHandler" />
+	</flow>
+	<flow name="serviceJobStatus:\soapkit-config" doc:id="51f2fe25-9c74-4e52-b1e1-b0fbe4fa28be">
+		<flow-ref doc:name="serviceJobStatus_SubFlow" doc:id="e123b890-90b4-4e5b-b4e5-83e670aeb295" name="serviceJobStatusSub_Flow"/>
+		<error-handler ref="framework.SourceExceptionHandler" />
+    </flow>
+    <flow name="serviceJobReschedule:\soapkit-config">
+		<flow-ref doc:name="serviceJobReschedule_SubFlow" doc:id="7134eb53-b54a-4262-9638-77daab28a0c4" name="serviceJobRescheduleSub_Flow"/>
+		<error-handler ref="framework.SourceExceptionHandler" />
+    </flow>
+    <flow name="serviceJobUpdate:\soapkit-config">
+		<flow-ref doc:name="serviceJobUpdate_SubFlow" doc:id="17aba5c3-1c0b-41a6-b816-c7650a833621" name="serviceJobUpdateSub_Flow"/>
+		<error-handler ref="framework.SourceExceptionHandler" />
+    </flow>
+    <flow name="serviceJobCancel:\soapkit-config">
+		<flow-ref doc:name="serviceJobCancel_SubFlow" doc:id="2218cf8f-2740-45f6-a335-271ce0cd1221" name="serviceJobCancelSub_Flow"/>
+		<error-handler ref="framework.SourceExceptionHandler" />
+    </flow>
+    <flow name="preAuthorizationCreate:\soapkit-config">
+		<flow-ref doc:name="preAuthorizationCreate_SubFlow" doc:id="9f183caa-80d9-488f-91d1-82ff9f0c6503" name="preAuthorizationCreateSub_Flow"/>
+		<error-handler ref="framework.SourceExceptionHandler" />
+    </flow>
+</mule>

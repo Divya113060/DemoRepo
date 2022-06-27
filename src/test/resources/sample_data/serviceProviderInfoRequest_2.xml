@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<ns0:serviceProviderInfoRequest xmlns:ns0="http://www.homeserve.com/ServiceBench/">
+  <ns0:version>ullamco</ns0:version>
+  <ns0:v4CrmVersion>architecto</ns0:v4CrmVersion>
+  <ns0:sourceSystemName>SB</ns0:sourceSystemName>
+  <ns0:sourceSystemVersion>Neque</ns0:sourceSystemVersion>
+  <ns0:serviceProviderRequest>
+    <ns0:requestControlID>60c09f403e31413ea03</ns0:requestControlID>
+    <ns0:serviceProviderAccount>quia</ns0:serviceProviderAccount>
+    <ns0:serviceProviderName>dolore</ns0:serviceProviderName>
+    <ns0:serviceProviderAddress1>sit</ns0:serviceProviderAddress1>
+    <ns0:serviceProviderAddress2>laboris</ns0:serviceProviderAddress2>
+    <ns0:serviceProviderCity>reprehenderit</ns0:serviceProviderCity>
+    <ns0:serviceProviderStateProvince>ad</ns0:serviceProviderStateProvince>
+    <ns0:serviceProviderPostalCode>sed</ns0:serviceProviderPostalCode>
+    <ns0:serviceProviderPhone>(112)-371-8915</ns0:serviceProviderPhone>
+  </ns0:serviceProviderRequest>
+</ns0:serviceProviderInfoRequest>
